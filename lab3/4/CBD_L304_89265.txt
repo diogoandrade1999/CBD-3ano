@@ -1,0 +1,105 @@
+a)
+CREATE KEYSPACE ex3_4 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+CREATE TABLE users (username text, first_name text, last_name text, city text, old_cars map<int, frozen<list<text>>>, Primary key(username));
+
+CREATE TABLE cars (car_id int, brand text, model text, year int, mileage int, colors set<text>, Primary key(car_id));
+
+CREATE TABLE offers (username text, car_id int, price int, date timestamp, Primary key(username, car_id));
+
+CREATE TABLE rating(car_id int, iteracoes int, sum int, Primary KEY (car_id)) ;
+
+
+b)
+users
+--------------------------------------------------------------------------------------------------------------------------------------------------
+{"username": "user14", "city": "Braga", "first_name": "fn14", "last_name": "ln14", "old_cars": null}
+{"username": "user8", "city": "Porto", "first_name": "fn8", "last_name": "ln8", "old_cars": {"2011": ["P"]}}
+{"username": "user12", "city": "Lisboa", "first_name": "fn12", "last_name": "ln12", "old_cars": null}
+{"username": "user2", "city": "Aveiro", "first_name": "fn2", "last_name": "ln2", "old_cars": {"2011": ["A", "C"], "2014": ["Z"]}}
+{"username": "user9", "city": "Lisboa", "first_name": "fn9", "last_name": "ln9", "old_cars": {"2018": ["P"]}}
+{"username": "user13", "city": "Braga", "first_name": "fn13", "last_name": "ln13", "old_cars": null}
+{"username": "user4", "city": "Aveiro", "first_name": "fn4", "last_name": "ln4", "old_cars": {"2010": ["S"], "2014": ["K"], "2018": ["L", "F"]}}
+{"username": "user1", "city": "Aveiro", "first_name": "fn1", "last_name": "ln1", "old_cars": {"2012": ["A", "B"], "2014": ["C"]}}
+{"username": "user10", "city": "Porto", "first_name": "fn10", "last_name": "ln10", "old_cars": null}
+{"username": "user7", "city": "Porto", "first_name": "fn7", "last_name": "ln7", "old_cars": {"2013": ["P"], "2015": ["L"]}}
+{"username": "user3", "city": "Aveiro", "first_name": "fn3", "last_name": "ln3", "old_cars": {"2009": ["Z"], "2014": ["C", "D"]}}
+{"username": "user6", "city": "Aveiro", "first_name": "fn6", "last_name": "ln6", "old_cars": {"2013": ["I"], "2014": ["O"], "2015": ["L", "F"]}}
+{"username": "user11", "city": "Lisboa", "first_name": "fn11", "last_name": "ln11", "old_cars": null}
+{"username": "user5", "city": "Aveiro", "first_name": "fn5", "last_name": "ln5", "old_cars": {"2009": ["S"], "2014": ["J"], "2018": ["F"]}}
+{"username": "user16", "city": "Evora", "first_name": "fn16", "last_name": "ln16", "old_cars": null}
+{"username": "user15", "city": "Braga", "first_name": "fn15", "last_name": "ln15", "old_cars": null}
+
+cars
+------------------------------------------------------------------------------------------------------------------
+{"car_id": 5, "brand": "C3", "colors": ["black"], "mileage": 16655, "model": "C", "year": 1998}
+{"car_id": 10, "brand": "M2", "colors": ["blue", "red"], "mileage": 1730, "model": "M", "year": 2013}
+{"car_id": 11, "brand": "J3", "colors": ["blue", "red"], "mileage": 2630, "model": "J", "year": 2014}
+{"car_id": 1, "brand": "A1", "colors": ["blue", "red"], "mileage": 100, "model": "A", "year": 2018}
+{"car_id": 8, "brand": "B2", "colors": ["white"], "mileage": 1730, "model": "B", "year": 2010}
+{"car_id": 2, "brand": "A2", "colors": ["blue", "red"], "mileage": 2000, "model": "A", "year": 2017}
+{"car_id": 4, "brand": "K1", "colors": ["green"], "mileage": 0, "model": "K", "year": 2020}
+{"car_id": 7, "brand": "A2", "colors": ["white"], "mileage": 1530, "model": "A", "year": 2015}
+{"car_id": 6, "brand": "C3", "colors": ["black"], "mileage": 5186, "model": "C", "year": 1997}
+{"car_id": 9, "brand": "B2", "colors": ["blue", "green", "red"], "mileage": 1730, "model": "B", "year": 2010}
+{"car_id": 12, "brand": "A3", "colors": ["black", "blue", "white"], "mileage": 4630, "model": "A", "year": 2002}
+{"car_id": 3, "brand": "B2", "colors": ["green"], "mileage": 2000, "model": "B", "year": 2010}
+
+offers
+-----------------------------------------------------------------------------------------
+{"username": "user2", "car_id": 4, "date": "2019-12-02 00:00:00.000Z", "price": 16500}
+{"username": "user9", "car_id": 8, "date": "2016-09-24 00:00:00.000Z", "price": 2400}
+{"username": "user4", "car_id": 1, "date": "2019-03-28 00:00:00.000Z", "price": 3100}
+{"username": "user1", "car_id": 3, "date": "2014-01-25 00:00:00.000Z", "price": 1000}
+{"username": "user1", "car_id": 10, "date": "2014-03-25 00:00:00.000Z", "price": 1000}
+{"username": "user10", "car_id": 10, "date": "2014-03-25 00:00:00.000Z", "price": 3000}
+{"username": "user7", "car_id": 7, "date": "2016-09-23 00:00:00.000Z", "price": 2600}
+{"username": "user7", "car_id": 8, "date": "2016-09-24 00:00:00.000Z", "price": 2300}
+{"username": "user3", "car_id": 4, "date": "2019-12-02 00:00:00.000Z", "price": 20000}
+{"username": "user6", "car_id": 10, "date": "2014-03-28 00:00:00.000Z", "price": 3100}
+{"username": "user5", "car_id": 4, "date": "2019-12-02 00:00:00.000Z", "price": 20100}
+{"username": "user15", "car_id": 1, "date": "2019-04-28 00:00:00.000Z", "price": 3200}
+
+rating
+--------------------------------------------
+{"car_id": 5, "iteracoes": 1, "sum": 1}
+{"car_id": 10, "iteracoes": 4, "sum": 16}
+{"car_id": 11, "iteracoes": 23, "sum": 92}
+{"car_id": 1, "iteracoes": 3, "sum": 15}
+{"car_id": 8, "iteracoes": 8, "sum": 6}
+{"car_id": 2, "iteracoes": 6, "sum": 24}
+{"car_id": 4, "iteracoes": 15, "sum": 75}
+{"car_id": 7, "iteracoes": 8, "sum": 24}
+{"car_id": 6, "iteracoes": 12, "sum": 12}
+{"car_id": 9, "iteracoes": 36, "sum": 40}
+{"car_id": 12, "iteracoes": 50, "sum": 86}
+{"car_id": 3, "iteracoes": 8, "sum": 20}
+
+
+d)
+CREATE INDEX on users (city);
+CREATE INDEX on cars (model);
+CREATE INDEX on cars (year);
+
+
+e)
+UPDATE users SET old_cars={2019:['A']} WHERE username='user10';
+UPDATE cars SET brand='C4' WHERE car_id=5;
+UPDATE rating SET sum = 2, iteracoes=2 WHERE car_id =5;
+UPDATE offers  SET date = totimestamp('2019-12-03') WHERE username ='user3' AND car_id = 3;
+UPDATE users SET first_name = 'fn1_new' WHERE username = 'user1';
+
+DELETE from users where username = 'user16';
+DELETE from cars where car_id = '12';
+DELETE from rating where car_id = '12';
+DELETE from offers where username = 'user16' AND car_id = 12;
+DELETE old_cars from users where username = 'user11';
+
+
+f)
+SELECT * FROM users WHERE city='Porto' ;
+SELECT first_name FROM users LIMIT 6;
+SELECT * FROM rating ;
+SELECT date, price FROM offers LIMIT 3 ;
+SELECT * FROM cars WHERE model='A' LIMIT 2;
+SELECT * FROM cars WHERE year=2014;

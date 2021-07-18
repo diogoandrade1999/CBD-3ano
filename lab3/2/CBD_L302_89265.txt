@@ -1,0 +1,95 @@
+a)
+CREATE KEYSPACE ex3_2 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+CREATE TABLE utilizadores(username varchar, nome varchar, email varchar, selo_temporal timestamp, Primary KEY (username));
+
+CREATE TABLE videos(id int, autor varchar, nome varchar, descricao text, tag set<text>, selo_temporal timestamp, Primary KEY (id));
+CREATE TABLE videos_autor(id list<int>, autor varchar, Primary KEY (autor));
+
+CREATE TABLE comentarios(autor varchar, id_video int, selo_temporal timestamp, content text, Primary KEY (id_video, selo_temporal)) WITH CLUSTERING ORDER BY (selo_temporal ASC);
+CREATE TABLE comentarios_autor(autor varchar, id_video int, selo_temporal timestamp, Primary KEY (autor, selo_temporal)) WITH CLUSTERING ORDER BY (selo_temporal ASC);
+
+CREATE TABLE followers(autor varchar, id_video int, Primary KEY (id_video, autor));
+
+CREATE TABLE eventos(user varchar, id_video int, tipo text, tempo_evento timestamp, tempo_video int, Primary KEY (id_video, user, tempo_evento));
+
+CREATE TABLE rating(id_video int, iteracoes int, sum int, Primary KEY (id_video)) ;
+
+b)
+---------------------------------------------------------------------------------------------------------------------
+{"username": "andre", "email": "andre@ua.pt", "nome": "andre", "selo_temporal": "2019-11-14 12:57:20.386Z"}
+{"username": "diogo", "email": "diogo.andrade@ua.pt", "nome": "diogo", "selo_temporal": "2019-11-14 12:55:39.442Z"}
+{"username": "daniel", "email": "daniel@ua.pt", "nome": "daniel", "selo_temporal": "2019-11-14 12:57:41.973Z"}
+{"username": "goncalo", "email": "goncalo@ua.pt", "nome": "goncalo", "selo_temporal": "2019-11-14 12:59:15.013Z"}
+{"username": "gsteps", "email": "gsteps@ua.pt", "nome": "passos", "selo_temporal": "2019-11-14 12:53:15.035Z"}
+{"username": "ndr", "email": "ndr@ua.pt", "nome": "andrade", "selo_temporal": "2019-11-14 12:56:33.755Z"}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+{"id": 5, "autor": "andre", "descricao": "my movie", "nome": "andre movie", "selo_temporal": "2019-11-21 11:58:29.923Z", "tag": ["#thebest", "#top"]}
+{"id": 1, "autor": "goncalo", "descricao": "first video", "nome": "first video", "selo_temporal": "2019-11-21 11:46:39.976Z", "tag": ["#2019", "#first"]}
+{"id": 2, "autor": "goncalo", "descricao": "new video", "nome": "new video", "selo_temporal": "2019-11-21 11:47:48.956Z", "tag": ["#2019", "#new"]}
+{"id": 4, "autor": "diogo", "descricao": "my new video", "nome": "my video", "selo_temporal": "2019-11-21 11:54:38.062Z", "tag": ["#top"]}
+{"id": 3, "autor": "diogo", "descricao": "new video", "nome": "new video", "selo_temporal": "2019-11-21 11:49:57.842Z", "tag": ["#2019", "#new"]}
+
+------------------------------------
+{"autor": "andre", "id": [5]}
+{"autor": "diogo", "id": [3, 4]}
+{"autor": "goncalo", "id": [1, 2]}
+
+---------------------------------------------------------------------------------------------------------------
+{"id_video": 5, "selo_temporal": "2019-11-21 12:19:33.235Z", "autor": "andre", "content": "Very good video!"}
+{"id_video": 1, "selo_temporal": "2019-11-21 12:22:00.930Z", "autor": "andre", "content": "Nice video!"}
+{"id_video": 1, "selo_temporal": "2019-11-21 12:23:01.713Z", "autor": "daniel", "content": "Nice!"}
+{"id_video": 1, "selo_temporal": "2019-11-21 12:23:15.976Z", "autor": "goncalo", "content": "Good!"}
+{"id_video": 3, "selo_temporal": "2019-11-21 12:23:38.239Z", "autor": "goncalo", "content": "Good!"}
+
+----------------------------------------------------------------------------------
+{"autor": "andre", "selo_temporal": "2019-11-21 12:19:33.000Z", "id_video": 5}
+{"autor": "andre", "selo_temporal": "2019-11-21 12:22:00.000Z", "id_video": 1}
+{"autor": "daniel", "selo_temporal": "2019-11-21 12:23:01.000Z", "id_video": 1}
+{"autor": "goncalo", "selo_temporal": "2019-11-21 12:23:15.000Z", "id_video": 1}
+{"autor": "goncalo", "selo_temporal": "2019-11-21 12:23:38.000Z", "id_video": 3}
+
+
+-------------------------------------
+{"id_video": 5, "autor": "andre"}
+{"id_video": 1, "autor": "andre"}
+{"id_video": 1, "autor": "daniel"}
+{"id_video": 1, "autor": "goncalo"}
+{"id_video": 3, "autor": "goncalo"}
+
+-------------------------------------------------------------------------------------------------------------------
+{"id_video": 1, "user": "andre", "tempo_evento": "2019-11-21 12:17:00.000Z", "tempo_video": 0, "tipo": "play"}
+{"id_video": 1, "user": "andre", "tempo_evento": "2019-11-21 12:22:00.000Z", "tempo_video": 300, "tipo": "stop"}
+{"id_video": 1, "user": "daniel", "tempo_evento": "2019-11-21 12:21:00.000Z", "tempo_video": 0, "tipo": "play"}
+{"id_video": 1, "user": "daniel", "tempo_evento": "2019-11-21 12:22:00.000Z", "tempo_video": 60, "tipo": "pause"}
+{"id_video": 1, "user": "daniel", "tempo_evento": "2019-11-21 12:22:10.000Z", "tempo_video": 70, "tipo": "play"}
+{"id_video": 1, "user": "daniel", "tempo_evento": "2019-11-21 12:26:00.000Z", "tempo_video": 300, "tipo": "stop"}
+
+--------------------------------------------
+{"id_video": 5, "iteracoes": 1, "sum": 5}
+{"id_video": 1, "iteracoes": 3, "sum": 12}
+{"id_video": 2, "iteracoes": 0, "sum": 0}
+{"id_video": 4, "iteracoes": 0, "sum": 0}
+{"id_video": 3, "iteracoes": 1, "sum": 3}
+
+
+c)
+SELECT * FROM videos_autor WHERE autor = 'diogo';
+SELECT * FROM comentarios_autor WHERE autor = 'diogo';
+SELECT * FROM comentarios WHERE id_video = '1';
+SELECT * FROM rating;
+
+
+d)
+1- SELECT * FROM comentarios WHERE id_video=1 ORDER BY selo_temporal DESC LIMIT 3;
+2- SELECT tag FROM videos WHERE id=1;
+3- CREATE INDEX ON videos (tag); Select * from videos where tag contains '#new';
+4- SELECT * FROM eventos WHERE user='daniel' LIMIT 5  ALLOW FILTERING ;
+5- CREATE INDEX ON videos (autor);SELECT * FROM videos WHERE autor = 'diogo' AND  selo_temporal >= '2019-11-21 11:50:45' ALLOW FILTERING ;
+6- Não é possivel
+7- SELECT autor FROM followers WHERE id_video=1 ;
+8- Não é possivel, era necessário um join
+9- Não consegui fazer
+10- SELECT token(id) FROM videos;
+11- Não consegui fazer

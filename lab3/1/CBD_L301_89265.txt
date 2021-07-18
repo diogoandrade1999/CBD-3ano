@@ -1,0 +1,78 @@
+SELECT cluster_name, listen_address FROM system.local;
+DESCRIBE TABLES
+help
+CREATE KEYSPACE tutorialspoint WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+DESCRIBE keyspaces;
+USE tutorialspoint;
+ALTER KEYSPACE tutorialspoint WITH replication = {'class':'NetworkTopologyStrategy'};
+DROP KEYSPACE tutorialspoint;
+DESCRIBE keyspaces;
+SELECT * FROM system_schema;
+exit
+CREATE KEYSPACE tutorialspoint WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+USE tutorialspoint ;
+CREATE TABLE emp(
+   emp_id int PRIMARY KEY,
+   emp_name text,
+   emp_city text,
+   emp_sal varint,
+   emp_phone varint
+   );
+CREATE TABLE emp(emp_id int PRIMARY KEY, emp_name text, emp_city text, emp_sal varint, emp_phone varint);
+select * from emp;
+ALTER TABLE emp ADD emp_email text ;
+select * from emp;
+ALTER TABLE emp DROP emp_email ;
+select * from emp;
+CREATE INDEX name ON emp (emp_name) ;
+BEGIN BATCH INSERT INTO emp (emp_id, emp_city, emp_name, emp_phone, emp_sal) values(4,'Pune','rajeev',9848022331,30000);UPDATE emp SET emp_sal = 50000 WHERE emp_id =3;DELETE emp_city FROM emp WHERE emp_id = 2;APPLY BATCH;
+select * from emp;
+BEGIN BATCH UPDATE emp SET emp_city = 'Chennai', emp_name = 'rahman' and emp_phone = 9848022330 WHERE emp_id =3;APPLY BATCH;
+BEGIN BATCH UPDATE emp SET emp_city = 'Chennai', emp_name = 'rahman', emp_phone = 9848022330 WHERE emp_id =3;APPLY BATCH;
+select * from emp;
+BEGIN BATCH INSERT INTO emp (emp_id, emp_city, emp_name, emp_phone, emp_sal) values(1,'Hyderabad','ram',9848022338,50000);APPLY BATCH;
+select * from emp;
+BEGIN BATCH INSERT INTO emp (emp_id, emp_city, emp_name, emp_phone, emp_sal) values(2,'DELHI','robin',9848022339,50000);APPLY BATCH;
+select * from emp;
+BEGIN BATCH UPDATE emp SET emp_sal = 45000 WHERE emp_id =3;APPLY BATCH;
+select * from emp;
+DELETE FROM emp WHERE emp_id = 4;
+select * from emp;
+CREATE TABLE data(name text PRIMARY KEY, email list<text>);
+INSERT INTO data(name, email) VALUES ('ramu',
+['abc@gmail.com','cba@yahoo.com']);
+INSERT INTO data(name, email) VALUES ('ramu', ['abc@gmail.com','cba@yahoo.com']);
+select * from data ;
+UPDATE data SET email = email +['xyz@tutorialspoint.com'] where name = 'ramu';
+select * from data ;
+CREATE TABLE data2 (name text PRIMARY KEY, phone set<varint>);
+INSERT INTO data2(name, phone)VALUES ('rahman',    {9848022338,9848022339});
+select * from data2 ;
+UPDATE data2 SET phone = phone + {9848022330} where name = 'rahman';
+select * from data2 ;
+CREATE TABLE data3 (name text PRIMARY KEY, address
+map<timestamp, text>);
+CREATE TABLE data3 (name text PRIMARY KEY, address map<timestamp, text>);
+INSERT INTO data3 (name, address)
+   VALUES ('robin', {'home' : 'hyderabad' , 'office' : 'Delhi' } );
+INSERT INTO data3 (name, address)    VALUES ('robin', {'home' : 'hyderabad' , 'office' : 'Delhi' } );
+DROP TABLE data3 ;
+CREATE TABLE data3 (name text PRIMARY KEY, address map<text, text>);
+INSERT INTO data3 (name, address)
+   VALUES ('robin', {'home' : 'hyderabad' , 'office' : 'Delhi' } );
+INSERT INTO data3 (name, address)    VALUES ('robin', {'home' : 'hyderabad' , 'office' : 'Delhi' } );
+select * from data3 ;
+UPDATE data3 SET address = address+{'office':'mumbai'} WHERE name = 'robin';
+select * from data3 ;
+exit
+USE tutorialspoint ;
+CREATE TYPE card_details (num int,pin int,name text,cvv int,phone set<int>);
+ALTER TYPE typename
+ADD field_name field_type; 
+ALTER TYPE typename ADD field_name field_type;
+ALTER TYPE card_details ADD email text;
+describe type card_details;
+ALTER TYPE card_details RENAME email TO mail;
+describe type card_details;
+DESCRIBE TYPES;
+exit

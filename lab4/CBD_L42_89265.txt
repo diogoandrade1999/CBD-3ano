@@ -1,0 +1,77 @@
+// nmec: 89265
+
+#1
+match (p:Person)-[r1:ACTED_IN]->(m:Movie)
+match (p:Person)-[r2:DIRECTED]->(m:Movie)
+return m.title, p.name
+
+#2
+match (p:Person)-[r:ACTED_IN]->(m:Movie)
+where m.released > 2005
+return m.title as Title, p.name as Actor
+
+#3
+match (m)<-[r]->(n)
+with m as m, n as n, count(r) as numrel
+where numrel > 1
+return m, n;
+
+#4
+MATCH (p1:Person)-[r1:REVIEWED]->(m:Movie)<-[r2:REVIEWED]-(p2:Person)
+WHERE id(p1) < id(p2)
+RETURN p1 as Person1,p2 as Person2 , m.title as Title
+
+#5
+MATCH (p1: Person)-[:ACTED_IN]->(m: Movie)<-[:ACTED_IN]-(p2: Person)
+WITH p1, p2, count(m) as numMovies
+WHERE numMovies> 1 and id(p1) > id(p2)
+RETURN distinct p1.name, p2.name
+order qby p1.name;
+
+#6
+match (p:Person)-[:ACTED_IN]->(m{title: "Apollo 13"})
+return (sum(m.released-p.born)/count(p)) as AverageAge;
+
+#7
+match (p:Person)-[:ACTED_IN]->(m:Movie)
+return m.title, (sum(m.released-p.born)/count(p)) as average_age
+order by average_age desc limit 10;
+
+#8
+match (p:Person)-[:ACTED_IN]->(m:Movie)
+return m.title, (sum(m.released-p.born)/count(p)) as average_age
+order by average_age asc limit 1;
+
+#9
+match p=shortestPath((p1:Person{name:"John Cusack"})-[*]-(p2:Person{name:"Demi Moore"}))
+return p;
+
+#10
+match p=shortestPath((p1:Person{name:"Keanu Reeves"})-[*]-(p2:Person{name:"Tom Cruise"}))
+return length(p);
+
+#11
+match p=shortestPath((p1:Person)-[*]-(p2:Person))
+where p2.name starts with 'Kevin' and p1.name starts with 'Jim'
+return length(p) order by length(p) limit 1;
+
+#12
+match p=shortestPath((p1:Person{name:"Jim Cash"})-[*1..2]-(p2:Person))
+where p2.name <> "Jim Cash" and length(p) = 2
+return p2.name, length(p);
+
+#13
+match p=shortestPath((p1:Person{name:"Kevin Bacon"})-[*]-(p2:Person))
+where p2.name <> "Kevin Bacon"
+return p2.name, length(p)
+order by length(p) desc limit 1;
+
+#14
+match p=shortestPath((p1:Person)-[*]-(p2:Person))
+where id(p1) < id(p2)
+return p1.name, p2.name, length(p)
+order by length(p) desc limit 1;
+
+#15
+
+#16
